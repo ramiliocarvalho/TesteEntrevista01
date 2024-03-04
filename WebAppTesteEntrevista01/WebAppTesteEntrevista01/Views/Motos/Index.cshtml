@@ -1,0 +1,69 @@
+﻿@model List<Moto>
+
+@{
+    ViewData["Title"] = "Listagem de Motos";
+}
+
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-controller="Motos" asp-action="Create">Cadastrar moto</a>
+    </div>
+    <br />
+
+    @if (TempData["MessageSucess"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageSucess"]
+        </div>
+    }
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageError"]
+        </div>
+    }
+
+    <br />
+    <h1 class="display-4">Listagem de Motos</h1>
+
+    <table class="table" id="table-motos">
+        <thead>
+            <tr>
+                <th scope="col">Identificador</th>
+                <th scope="col">Ano</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">Placa</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var moto in Model)
+                {
+                    <tr>
+                        <th scope="row">@moto.Id</th>
+                        <td>@moto.Ano</td>
+                        <td>@moto.Modelo</td>
+                        <td>@moto.Placa</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-Id="@moto.Id" asp-controller="Motos" asp-action="Edit">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-Id="@moto.Id" asp-controller="Motos" asp-action="ConfirmDelete">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="odd"><td valign="top" colspan="5">Nehuma moto encontrado</td></tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,12 @@
+﻿@model Moto
+
+@{
+    ViewData["Title"] = "Confirmação excluir moto";
+}
+
+<div class="text-center">
+    <h3>Confirma a exclusão da moto de placa: @Model.Placa ?</h3>
+</div>
+
+<a class="btn btn-primary" role="button" asp-asp-controller="Motos" asp-action="Index">Cancelar</a>
+<a class="btn btn-danger" role="button" asp-asp-controller="Motos" asp-action="Delete" asp-route-id="@Model.Id">Confirmar</a>

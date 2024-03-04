@@ -1,0 +1,73 @@
+﻿@model List<Usuario> 
+
+@{
+    ViewData["Title"] = "Listagem de Usuários";
+}
+
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-controller="Usuarios" asp-action="Create">Cadastrar usuário</a>
+    </div>
+    <br />
+
+    @if(TempData["MessageSucess"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageSucess"]
+        </div>
+    }
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageError"]
+        </div>
+    }
+
+    <br />
+    <h1 class="display-4">Listagem de Usuários</h1>
+
+    <table id="table-usuarios" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Login</th>
+                <th scope="col">Email</th>
+                <th scope="col">Perfil</th>
+                <th scope="col">Data Cadastro</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var usuario in Model)
+                {
+                    <tr>
+                        <th scope="row">@usuario.Id</th>
+                        <td>@usuario.Nome</td>
+                        <td>@usuario.Login</td>
+                        <td>@usuario.Email</td>
+                        <td>@(usuario.Perfil == WebAppTesteEntrevista01.Enums.PerfilEnums.Admin ? "Administrador" : "Entregador")</td>
+                        <td>@usuario.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-Id="@usuario.Id" asp-controller="Usuarios" asp-action="Edit">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-Id="@usuario.Id" asp-controller="Usuarios" asp-action="ConfirmDelete">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="odd"><td valign="top" colspan="5">Nehum usuário encontrado</td></tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
