@@ -1,0 +1,166 @@
+﻿@model CotacaoLocacao
+
+@{
+    ViewData["Title"] = "Locação de moto";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Locação de moto</h1>
+</div>
+
+@if (TempData["MessageSucess"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MessageSucess"]
+    </div>
+}
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MessageError"]
+    </div>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pesquisa</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-3">
+                        <td>Selecione o plano:</td>
+                    </div>
+                    <div class="col-3">
+                        <select id="ddlPlanos" name="Id" class="form-control" asp-items="@ViewBag.Planos"><option value="-1" label="Selecione o plano"></option> </select>
+                    </div>
+                    <div class="col-3">
+                        <div><button type="submit">Calcular</button></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 mt-1">
+                        <td>Desejo informar a data de entrega:</td>
+                    </div>
+                    <div class="col-3 mt-1">
+                        <input type="date" id="dtAvulsa" name="dataAvulsa" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-secondary" asp-controller="Locacoes" asp-action="Index" role="button">Voltar</a>
+            @if (Model.IsLocacaoDisponivel)
+            {
+                <a class="btn btn-primary" asp-controller="Locacoes" asp-action="Create" asp-route-IsLocacaoDisponivel="true" role="button">Alugar</a>
+            }
+        }
+    </div>
+
+
+
+    <div class="form-group">
+
+
+        @if (Model.IsCotacaoCalculada)
+        {
+            <br />
+
+            <div class="row">
+                <div class="col">
+                    <td><strong>DADOS PAGAMENTO (PLANO):</strong></td>
+                    <div class="col">
+                        <td>Valor:</td>
+                        <td>R$ @Model.TotalPagar</td>
+                    </div>
+                </div>
+                @if (Model.IsMulta)
+                {
+                    <div class="col">
+                        <font color="Red"> <td> <strong>DADOS PAGAMENTO (AVULSO):</strong></td> </font>
+                        <div class="col">
+                            <td>Valor:</td>
+                            <td>R$ @Model.TotalPagarAvulso</td>
+                        </div>
+                    </div>
+                }
+            </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <td><strong>DADOS DA LOCAÇÃO:</strong></td>
+                    <div class="col">
+                        <td>Data Criação:</td>
+                        <td>@Model.DataCriacao.ToString("dd/MM/yyyy")</td>
+                    </div>
+                    <div class="col">
+                        <td>Data Inicio:</td>
+                        <td>@Model.DataInicio.ToString("dd/MM/yyyy")</td>
+                    </div>
+                    <div class="col">
+                        <td>Previsão Término:</td>
+                        <td>@Model.DataPrevisaoTerminoSistema.ToString("dd/MM/yyyy")</td>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <td><strong>DADOS DA LOCADOR:</strong></td>
+                    <div class="col">
+                        <td>Nome:</td>
+                        <td>@Model.NomeEntregador</td>
+                    </div>
+                    <div class="col">
+                        <td>E-mail:</td>
+                        <td>@Model.EmailEntregador</td>
+                    </div>
+                    <div class="col">
+                        <td>Habilitação:</td>
+                        <td>@Model.Categoria</td>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <td><strong>DADOS DA MOTO:</strong></td>
+                    <div class="col">
+                        <td>Ano:</td>
+                        <td>@Model.AnoMoto</td>
+                    </div>
+                    <div class="col">
+                        <td>Modelo:</td>
+                        <td>@Model.ModeloMoto</td>
+                    </div>
+                    <div class="col">
+                        <td>Placa:</td>
+                        <td>@Model.PlacaMoto</td>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <td><strong>DADOS DO PLANO:</strong></td>
+                    <div class="col">
+                        <td>Descrição:</td>
+                        <td>@Model.DescricaoPlano</td>
+                    </div>
+                    <div class="col">
+                        <td>Nro. de Dias :</td>
+                        <td>@Model.NumeroDiaria</td>
+                    </div>
+                    <div class="col">
+                        <td>Valor Diária:</td>
+                        <td>@Model.ValorDiaria</td>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>
+

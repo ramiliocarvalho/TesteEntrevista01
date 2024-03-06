@@ -1,0 +1,74 @@
+﻿@model List<Locacao>
+
+@{
+    ViewData["Title"] = "Listagem de Locaçoes";
+}
+
+<div class="text-center">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-controller="Locacoes" asp-action="Create">Alugar</a>
+    </div>
+    <br />
+
+    @if (TempData["MessageSucess"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageSucess"]
+        </div>
+    }
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MessageError"]
+        </div>
+    }
+
+    <br />
+    <h1 class="display-4">Listagem de Locações</h1>
+
+    <table class="table" id="table-locacoes">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Data Criação</th>
+                <th scope="col">Data Inicio</th>
+                <th scope="col">Data Término</th>
+                <th scope="col">Dt Prev. Termino Sistema</th>
+                <th scope="col">Dt Prev. Termino Usuário</th>
+                <th scope="col">Placa</th>
+                <th scope="col">Plano</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null || Model.Any())
+            {
+                foreach (var locacao in Model)
+                {
+                    <tr>
+                        <th scope="row">@locacao.Id</th>
+                        <td>@locacao.DataCriacao.ToString("dd/MM/yyyy")</td>
+                        <td>@locacao.DataInicio.ToString("dd/MM/yyyy")</td>
+                        <td>@locacao.DataTermino?.ToString("dd/MM/yyyy")</td>
+                        <td>@locacao.DataPrevisaoTerminoSistema.ToString("dd/MM/yyyy")</td>
+                        <td>@locacao.DataPrevisaoTerminoUsuario?.ToString("dd/MM/yyyy")</td>
+                        <td>@locacao.Moto.Placa</td>
+                        <td>@locacao.Plano.Descricao</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-Id="@locacao.Id" asp-controller="Locacoes" asp-action="FinalizarLocacao">Devolver</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="odd"><td valign="top" align="center" colspan="10">Nenhuma locação encontrada</td></tr>
+            }
+
+        </tbody>
+    </table>
+</div>

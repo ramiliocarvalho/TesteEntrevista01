@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NuGet.Packaging.Signing;
+using NuGet.Protocol.Plugins;
 using WebAppTesteEntrevista01.Models;
 
 namespace WebAppTesteEntrevista01.Repository
@@ -8,8 +10,8 @@ namespace WebAppTesteEntrevista01.Repository
     {
         private readonly Context _context;
 
-        public Usuario(Context context) 
-        { 
+        public Usuario(Context context)
+        {
             _context = context;
         }
 
@@ -22,12 +24,17 @@ namespace WebAppTesteEntrevista01.Repository
             return usuario;
         }
 
+        public CadastroEntregador CreateEntregador(CadastroEntregador entregador)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Models.Usuario> List()
         {
             return _context.Usuarios.ToList();
         }
 
-        public Models.Usuario? Get(int? id)
+        public Models.Usuario? GetById(int? id)
         {
             return _context.Usuarios.FirstOrDefault(m => m.Id == id);
         }
@@ -39,16 +46,16 @@ namespace WebAppTesteEntrevista01.Repository
 
         public Models.Usuario Edit(Models.Usuario usuario)
         {
-            var usuarioDb = Get(usuario.Id);
+            var usuarioDb = GetById(usuario.Id);
 
             if (usuarioDb == null) throw new Exception("Houve erro na atualização do usuário");
 
             usuarioDb.Nome = usuario.Nome;
-            usuarioDb.Email = usuario.Email;
             usuarioDb.Login = usuario.Login;
-            usuarioDb.Nome = usuario.Nome;
-            usuarioDb.DataAlteracao = DateTime.UtcNow;
+            usuarioDb.Senha = usuario.Senha;
+            usuarioDb.Email = usuario.Email;
             usuarioDb.Perfil = usuario.Perfil;
+            usuarioDb.DataAlteracao = DateTime.UtcNow;
 
             _context.Update(usuarioDb);
             _context.SaveChanges();
@@ -58,7 +65,7 @@ namespace WebAppTesteEntrevista01.Repository
 
         public bool Delete(int id)
         {
-            var usuarioDb = Get(id);
+            var usuarioDb = GetById(id);
 
             if (usuarioDb == null) throw new Exception("Houve erro na exclusão do usuário");
 
@@ -67,5 +74,40 @@ namespace WebAppTesteEntrevista01.Repository
 
             return true;
         }
+
+        public Models.Entregador? GetEntregadorById(int id)
+        {
+            return _context.Entregadores
+                .Include(u => u.Usuario)
+                .FirstOrDefault(e => e.UsuarioId == id);
+        }
+
+        public Models.Entregador? GetByCnpj(string cnpj)
+        {
+            return _context.Entregadores
+                .Include(u => u.Usuario)
+                .FirstOrDefault(e => e.Cnpj.ToLower() == cnpj.ToLower());
+        }
+
+        public Models.Entregador? GetByCnh(string cnh)
+        {
+            return _context.Entregadores
+                .Include(u => u.Usuario)
+                .FirstOrDefault(e => e.NumeroCnh.ToLower() == cnh.ToLower());
+        }
+
+        public bool SetImageCnh(int id, string path)
+        {
+            var entregadorDb = _context.Entregadores.FirstOrDefault(e => e.UsuarioId == id);
+            if (entregadorDb == null) throw new Exception("Houve erro na atualização da imagem da CNH");
+
+            entregadorDb.EnderecoImagemCnh = path;
+
+            _context.Update(entregadorDb);
+            _context.SaveChanges();
+
+            return true;
+        }
+
     }
 }

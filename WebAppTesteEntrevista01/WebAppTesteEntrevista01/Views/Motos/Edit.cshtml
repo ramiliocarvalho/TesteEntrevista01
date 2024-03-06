@@ -13,13 +13,13 @@
 
     <div class="mb-3">
         <label for="Ano" class="form-label">Ano</label>
-        <input type="text" asp-for="Ano" class="form-control" placeholder="Digite o ano da moto">
+        <input type="text" asp-for="Ano" class="form-control" readonly="readonly" placeholder="Digite o ano da moto">
         @Html.ValidationMessageFor(v => v.Ano)
     </div>
 
     <div class="mb-3">
         <label for="Modelo" class="form-label">Modelo</label>
-        <input type="text" asp-for="Modelo" class="form-control" placeholder="Digite o modelo da moto">
+        <input type="text" asp-for="Modelo" class="form-control" readonly="readonly" placeholder="Digite o modelo da moto">
         @Html.ValidationMessageFor(v => v.Modelo)
     </div>
 

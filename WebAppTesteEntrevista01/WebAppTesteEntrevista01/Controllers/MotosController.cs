@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using WebAppTesteEntrevista01.Filters;
 using WebAppTesteEntrevista01.Models;
 using WebAppTesteEntrevista01.Repository;
 
 namespace WebAppTesteEntrevista01.Controllers
 {
+    [PageUserLoged]
+    [PageRestrictedAdmin]
     public class MotosController : Controller
     {
         private readonly IMoto _moto;
@@ -27,14 +30,17 @@ namespace WebAppTesteEntrevista01.Controllers
 
         public IActionResult Edit(int id)
         {
-            var moto = _moto.Get(id);
+            var moto = _moto.GetById(id);
 
             return View(moto);
         }
 
         public IActionResult ConfirmDelete(int id)
         {
-            var moto = _moto.Get(id);
+            //Eu como usuário admin quero remover uma moto que foi cadastrado incorretamente, desde que não tenha registro de locações.
+
+
+            var moto = _moto.GetById(id);
 
             return View(moto);
         }
@@ -69,8 +75,15 @@ namespace WebAppTesteEntrevista01.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _moto.Create(moto);
-                    TempData["MessageSucess"] = "Moto cadastrada com sucesso";
+                    var motoDb = _moto.GetByPlaca(moto.Placa);
+                    if (motoDb != null)
+                        TempData["MessageError"] = "Esta placa já se encontra em nosso sistema.";
+                    else
+                    {
+                        _moto.Create(moto);
+                        TempData["MessageSucess"] = "Moto cadastrada com sucesso";
+                    }
+
                     return RedirectToAction("Index");
                 }
 
@@ -90,8 +103,15 @@ namespace WebAppTesteEntrevista01.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _moto.Edit(moto);
-                    TempData["MessageSucess"] = "Moto alterada com sucesso";
+                    var motoDb = _moto.GetByPlaca(moto.Placa);
+                    if (motoDb == null || motoDb.Id == moto.Id)
+                    {
+                        _moto.Edit(moto);
+                        TempData["MessageSucess"] = "Placa da moto alterada com sucesso";
+                    }
+                    else
+                        TempData["MessageError"] = "Esta placa já se encontra em nosso sistema.";
+
                     return RedirectToAction("Index");
                 }
 
@@ -99,7 +119,7 @@ namespace WebAppTesteEntrevista01.Controllers
             }
             catch (Exception ex)
             {
-                TempData["MessageError"] = $"Ops, Não conseguimos atualizar a moto, tente novamente. Detalhe do erro: {ex.Message}";
+                TempData["MessageError"] = $"Ops, Não conseguimos atualizar a placa da moto, tente novamente. Detalhe do erro: {ex.Message}";
                 return RedirectToAction("Index");
             }
         }

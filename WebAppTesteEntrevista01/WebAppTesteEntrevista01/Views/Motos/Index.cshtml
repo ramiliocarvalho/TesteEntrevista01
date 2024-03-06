@@ -40,7 +40,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model != null && Model.Any())
+            @if (Model != null || Model.Any())
             {
                 foreach (var moto in Model)
                 {

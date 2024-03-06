@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAppTesteEntrevista01.Filters;
 using WebAppTesteEntrevista01.Models;
 using WebAppTesteEntrevista01.Repository;
 
 namespace WebAppTesteEntrevista01.Controllers
 {
+    [PageRestrictedAdmin]
     public class UsuariosController : Controller
     {
         private readonly IUsuario _usuario;
@@ -26,14 +28,14 @@ namespace WebAppTesteEntrevista01.Controllers
 
         public IActionResult Edit(int id)
         {
-            var usuario = _usuario.Get(id);
+            var usuario = _usuario.GetById(id);
 
             return View(usuario);
         }
 
         public IActionResult ConfirmDelete(int id)
         {
-            var usuario = _usuario.Get(id);
+            var usuario = _usuario.GetById(id);
 
             return View(usuario);
         }

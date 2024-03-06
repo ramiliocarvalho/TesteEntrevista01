@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebAppTesteEntrevista01.Models;
@@ -11,9 +12,11 @@ using WebAppTesteEntrevista01.Models;
 namespace WebAppTesteEntrevista01.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240304154009_Criando relacionamento Usuario Entregador")]
+    partial class CriandorelacionamentoUsuarioEntregador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,11 +41,11 @@ namespace WebAppTesteEntrevista01.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("EnderecoImagemCnh")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NumeroCnh")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("NumeroCnh")
+                        .HasColumnType("integer");
 
                     b.Property<int>("TipoCnh")
                         .HasColumnType("integer");
@@ -52,8 +55,7 @@ namespace WebAppTesteEntrevista01.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Entregadores");
                 });
@@ -81,22 +83,16 @@ namespace WebAppTesteEntrevista01.Migrations
                     b.Property<DateTime>("DataTermino")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("EntregadorId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("MotoId")
                         .HasColumnType("integer");
 
                     b.Property<int>("PlanoId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UsuarioEntregadorId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("MotoId");
-
-                    b.HasIndex("PlanoId");
-
-                    b.HasIndex("UsuarioEntregadorId");
 
                     b.ToTable("Locacoes");
                 });
@@ -190,13 +186,13 @@ namespace WebAppTesteEntrevista01.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NumeroDiaria")
+                    b.Property<int>("NumeroDias")
                         .HasColumnType("integer");
 
                     b.Property<int>("PorcentagemDiariaNaoEfetivada")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("ValorDiaria")
+                    b.Property<decimal>("ValorDia")
                         .HasColumnType("numeric");
 
                     b.Property<decimal>("ValorDiariaAdicional")
@@ -265,57 +261,12 @@ namespace WebAppTesteEntrevista01.Migrations
             modelBuilder.Entity("WebAppTesteEntrevista01.Models.Entregador", b =>
                 {
                     b.HasOne("WebAppTesteEntrevista01.Models.Usuario", "Usuario")
-                        .WithOne("Entregador")
-                        .HasForeignKey("WebAppTesteEntrevista01.Models.Entregador", "UsuarioId")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("WebAppTesteEntrevista01.Models.Locacao", b =>
-                {
-                    b.HasOne("WebAppTesteEntrevista01.Models.Moto", "Moto")
-                        .WithMany("Locacoes")
-                        .HasForeignKey("MotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebAppTesteEntrevista01.Models.Plano", "Plano")
-                        .WithMany("Locacoes")
-                        .HasForeignKey("PlanoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebAppTesteEntrevista01.Models.Usuario", "UsuarioEntregador")
-                        .WithMany("Locacoes")
-                        .HasForeignKey("UsuarioEntregadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Moto");
-
-                    b.Navigation("Plano");
-
-                    b.Navigation("UsuarioEntregador");
-                });
-
-            modelBuilder.Entity("WebAppTesteEntrevista01.Models.Moto", b =>
-                {
-                    b.Navigation("Locacoes");
-                });
-
-            modelBuilder.Entity("WebAppTesteEntrevista01.Models.Plano", b =>
-                {
-                    b.Navigation("Locacoes");
-                });
-
-            modelBuilder.Entity("WebAppTesteEntrevista01.Models.Usuario", b =>
-                {
-                    b.Navigation("Entregador")
-                        .IsRequired();
-
-                    b.Navigation("Locacoes");
                 });
 #pragma warning restore 612, 618
         }

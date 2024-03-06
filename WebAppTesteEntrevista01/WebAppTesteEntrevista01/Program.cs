@@ -17,6 +17,8 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 IServiceCollection serviceCollection = builder.Services.AddScoped<IMoto, WebAppTesteEntrevista01.Repository.Moto>();
 serviceCollection = builder.Services.AddScoped<IUsuario, WebAppTesteEntrevista01.Repository.Usuario>();
+serviceCollection = builder.Services.AddScoped<ILocacao, WebAppTesteEntrevista01.Repository.Locacao>();
+serviceCollection = builder.Services.AddScoped<IPlano, WebAppTesteEntrevista01.Repository.Plano>();
 serviceCollection = builder.Services.AddScoped<ISessao, Sessao>();
 
 builder.Services.AddSession(o =>

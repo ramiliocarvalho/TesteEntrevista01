@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WebAppTesteEntrevista01.Filters;
 using WebAppTesteEntrevista01.Models;
 
 namespace WebAppTesteEntrevista01.Controllers
 {
+    [PageUserLoged]
     public class HomeController : Controller
     {
         public IActionResult Index()

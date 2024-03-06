@@ -6,7 +6,9 @@
 
         List<Models.Moto> List();
 
-        Models.Moto? Get(int? id);
+        Models.Moto? GetById(int? id);
+
+        Models.Moto? GetByPlaca(string placa);
 
         Models.Moto Edit(Models.Moto moto);
 

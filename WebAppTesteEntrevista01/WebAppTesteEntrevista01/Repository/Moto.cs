@@ -25,18 +25,16 @@ namespace WebAppTesteEntrevista01.Repository
             return _context.Motos.ToList();
         }
 
-        public Models.Moto? Get(int? id)
+        public Models.Moto? GetById(int? id)
         {
             return _context.Motos.FirstOrDefault(m => m.Id == id);
         }
 
         public Models.Moto Edit(Models.Moto moto)
         {
-            var motoDb = Get(moto.Id);
+            var motoDb = GetById(moto.Id);
 
             if (motoDb == null) throw new Exception("Houve erro na atualização da moto");
-
-            //Validar se a placa ja existe no banco
 
             motoDb.Placa = moto.Placa;
             
@@ -48,7 +46,7 @@ namespace WebAppTesteEntrevista01.Repository
 
         public bool Delete(int id)
         {
-            var motoDb = Get(id);
+            var motoDb = GetById(id);
 
             if (motoDb == null) throw new Exception("Houve erro na exclusão da moto");
 
@@ -56,6 +54,11 @@ namespace WebAppTesteEntrevista01.Repository
             _context.SaveChanges();
 
             return true;
+        }
+
+        public Models.Moto? GetByPlaca(string placa)
+        {
+            return _context.Motos.FirstOrDefault(m => m.Placa.ToLower() == placa.ToLower());
         }
     }
 }

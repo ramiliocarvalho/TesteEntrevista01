@@ -1,0 +1,77 @@
+﻿@using WebAppTesteEntrevista01.Enums;
+@model CadastroEntregador
+
+@{
+    Layout = "_LayoutDisconnected";
+    ViewData["Title"] = "Cadastar Entregador";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cadastrar Entregador</h1>
+</div>
+
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MessageError"]
+    </div>
+}
+
+<form asp-controller="Login" asp-action="Create" method="post">
+    <div class="mb-3">
+        <label for="Nome" class="form-label">Nome</label>
+        <input type="text" asp-for="Nome" class="form-control"  placeholder="Digite o nome">
+        @Html.ValidationMessageFor(v => v.Nome)
+    </div>
+
+    <div class="mb-3">
+        <label for="Login" class="form-label">Login</label>
+        <input type="text" asp-for="Login" class="form-control" placeholder="Digite o login">
+        @Html.ValidationMessageFor(v => v.Login)
+    </div>
+
+    <div class="mb-3">
+        <label for="Senha" class="form-label">Senha</label>
+        <input type="password" asp-for="Senha" class="form-control" placeholder="Digite a senha">
+        @Html.ValidationMessageFor(v => v.Senha)
+    </div>
+
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="text" asp-for="Email" class="form-control" placeholder="Digite o email">
+        @Html.ValidationMessageFor(v => v.Email)
+    </div>
+
+    <div class="mb-3">
+        <label for="Cnpj" class="form-label">CNPJ</label>
+        <input type="text" asp-for="Cnpj" class="form-control" placeholder="Digite o Cnpj">
+        @Html.ValidationMessageFor(v => v.Cnpj)
+    </div>
+
+    <div class="mb-3">
+        <label for="DataNascimento" class="form-label">Data de nascimento</label>
+        <input type="date" asp-for="DataNascimento" class="form-control" placeholder="Digite a data de nascimento">
+        @Html.ValidationMessageFor(v => v.DataNascimento)
+    </div>
+
+    <div class="mb-3">
+        <label for="Cnh" class="form-label">CNH</label>
+        <input type="text" asp-for="NumeroCnh" class="form-control" placeholder="Digite o número da CNH">
+        @Html.ValidationMessageFor(v => v.NumeroCnh)
+    </div>
+
+    <div class="mb-3">
+        <label for="TipoCnh" class="form-label">Tipo CNH</label>
+        <select asp-for="TipoCnh" class="form-control">
+            <option value="">Selecione</option>
+            <option value="@TipoCnhEnums.CategoriaA">Categoria A</option>
+            <option value="@TipoCnhEnums.CategoriaB">Categoria B</option>
+            <option value="@TipoCnhEnums.Ambas">Ambas</option>
+        </select>
+        @Html.ValidationMessageFor(v => v.TipoCnh)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <a class="btn btn-secondary" asp-controller="Login" asp-action="Index" role="button">Voltar</a>
+</form>

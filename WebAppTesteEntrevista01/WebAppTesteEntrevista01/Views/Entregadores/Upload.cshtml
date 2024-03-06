@@ -1,0 +1,35 @@
+﻿@model Entregador
+
+@{
+    ViewData["Title"] = "Dados do Entregador";
+}
+
+@if (TempData["MessageSucess"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MessageSucess"]
+    </div>
+}
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+        @TempData["MessageError"]
+    </div>
+}
+
+<form action="/Entregadores/Upload" method="post" enctype="multipart/form-data">
+    <label>Escolha sua imagem para upload</label>
+    <input type="file" name="foto" />
+    <br />
+    <button type="submit" class="btn btn-danger">Enviar a imagem</button>
+    <br />
+    @*<img src="~/Images/811587cd-c1f5-4bcf-a398-fbb84984b22d_Captura de tela 2023-08-02 104514.png" /> *@
+    @if (Model.EnderecoImagemCnh != null)
+    {
+        <img src="~/Images/@Model.EnderecoImagemCnh" />
+
+        //84ed33c9 - 21b8 - 4bb7 - 9a15 - f324d18e3b65_Captura de tela 2023 - 08 - 02 104514.png
+    }
+</form>
